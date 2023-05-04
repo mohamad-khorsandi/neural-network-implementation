@@ -20,7 +20,7 @@ def main():
     # You should define x_train and y_train
     feature_extractor = resnet34(pretrained=True)
 
-    #todo
+    # todo
     #neural_network = NeuralNetwork()
     #neural_network.train()
     #neural_network.confusion_matrix()
