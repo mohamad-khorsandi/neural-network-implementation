@@ -1,4 +1,3 @@
-import np as np
 import numpy as np
 import torch
 import torchvision.transforms as transforms
