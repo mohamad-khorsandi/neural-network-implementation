@@ -1,12 +1,4 @@
 import numpy as np
-import matplotlib.pyplot as plt
-import torch
-from torchvision import datasets
-import torchvision.transforms as transforms
-from torchvision.models import resnet34
-from sklearn.metrics import confusion_matrix, f1_score
-import seaborn as sb
-
 from dence import Dense
 from activation_functions import ReLU, Sigmoid, Softmax
 from loss_functions import CategoricalCrossEntropyLoss
@@ -14,21 +6,33 @@ from optimizers import SGD
 
 
 class NeuralNetwork:
-    def __init__(self, first_layer_neurons, last_layer_neurons, x_train, y_train):
-        self.Layer1 = Dense(first_layer_neurons, 20)  # d is the output dimension of feature extractor
+    def __init__(self, first_layer_neurons, hidden_layer_size, last_layer_neurons, x_train, y_train):
+        w1 = [[1, 1, 1],
+              [-1, -1, -1]]
+        b1 = [0,3]
+
+        self.Layer1 = Dense(first_layer_neurons, hidden_layer_size, w1, b1)
+
         self.Act1 = ReLU()
-        self.Layer2 = Dense(20, last_layer_neurons)
+
+        w2 = [[0,1],
+              [1,0]]
+        b2 = [-1, 2]
+        self.Layer2 = Dense(hidden_layer_size, last_layer_neurons, w2, b2)
+
         self.Act2 = Softmax()
         self.Loss = CategoricalCrossEntropyLoss()
         self.Optimizer = SGD(learning_rate=0.001)
         self.x_train = x_train
         self.y_train = y_train
+        self.last_layer_neurons = last_layer_neurons
 
     def train(self):
         for epoch in range(20):
             # forward
             self.Layer1.forward(self.x_train)
             self.Act1.forward(self.Layer1.output)
+
             self.Layer2.forward(self.Act1.output)
             self.Act2.forward(self.Layer2.output)
             loss = self.Loss.forward(self.Act2.output, self.y_train)
@@ -54,10 +58,13 @@ class NeuralNetwork:
 
     # todo cal this for test and train set
     def confusion_matrix(self, y_true, y_predict):
-        cm_train = confusion_matrix(y_true, y_predict)
-        plt.subplots(figsize=(10, 6))
-        sb.heatmap(cm_train, annot=True, fmt='g')  # todo make sure that "sb" is supposed to be seaborn
-        plt.xlabel("Predicted")
-        plt.ylabel("Actual")
-        plt.title("Confusion Matrix for the training set")
-        plt.show()
+        pass
+        # cm_train = confusion_matrix(y_true, y_predict)
+        # plt.subplots(figsize=(10, 6))
+        # sb.heatmap(cm_train, annot=True, fmt='g')  # todo make sure that "sb" is supposed to be seaborn
+        # plt.xlabel("Predicted")
+        # plt.ylabel("Actual")
+        # plt.title("Confusion Matrix for the training set")
+        # plt.show()
+
+

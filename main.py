@@ -1,3 +1,5 @@
+import np as np
+import numpy as np
 import torch
 import torchvision.transforms as transforms
 from torchvision import datasets
@@ -38,17 +40,30 @@ def main():
             break
 
     x_train = torch.stack(x_train)
-    y_train = torch.tensor(y_train)
+    y_train = np.array(y_train)
 
     features = extract_feature(x_train)
     train_features = features.reshape(features.shape[0], features.shape[1])
-    print(train_features.shape)
-    print(train_features)
 
-    neural_network = NeuralNetwork()
+    neural_network = NeuralNetwork(train_features.shape[0], 20, 10, train_features, y_train)
     neural_network.train()
-    neural_network.confusion_matrix()
+    #neural_network.confusion_matrix()
 
+
+def one_hot_encode(data_class, cat_count):
+    one_hot_list = np.zeros((len(data_class), cat_count))
+
+    for i in range(len(data_class)):
+        one_hot = np.zeros(cat_count)
+        one_hot[data_class[i]] = 1
+        one_hot_list[i] = one_hot
+
+    return one_hot_list
 
 if __name__ == '__main__':
-    main()
+    train_features = np.array([[1, 2, 3],
+                               [4, 5, 6]])
+    y_train = one_hot_encode([0, 1], 2)
+
+    neural_network = NeuralNetwork(3, 2, 2, train_features, y_train)
+    neural_network.train()
