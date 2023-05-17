@@ -57,12 +57,12 @@ def one_hot_encode(data_class, cat_count):
         one_hot[data_class[i]] = 1
         one_hot_list[i] = one_hot
 
-    return one_hot_list
+    return one_hot_list # TODO
 
 if __name__ == '__main__':
-    train_features = np.array([[1, 2, 3],
-                               [4, 5, 6]])
+    train_features = np.array([[1, 2, 3, 1],
+                               [4, 5, 6, 8]])
     y_train = one_hot_encode([0, 1], 2)
 
-    neural_network = NeuralNetwork(3, 2, 2, train_features, y_train)
+    neural_network = NeuralNetwork(4, 3, 2, train_features, y_train)
     neural_network.train()

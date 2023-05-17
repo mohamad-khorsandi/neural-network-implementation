@@ -4,4 +4,3 @@ class SGD:
 
     def update(self, layer):
         pass
-        # // To do: Update layer params based on gradient descent rule

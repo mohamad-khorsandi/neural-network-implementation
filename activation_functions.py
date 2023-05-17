@@ -6,7 +6,7 @@ class ReLU:
         self.b_output = None
         self.output = None
 
-    def forward(self, inputs):  # input = arrays of z
+    def forward(self, inputs):
         z_array = np.array(inputs)
         row, col = z_array.shape
         for i in range(row): # todo use matrix
@@ -15,9 +15,8 @@ class ReLU:
         self.output = z_array
 
     def backward(self, b_input):
-        pass
-        # // To do: Implement the ReLU derivative with respect to the input
-
+        tmp = (self.output > 0)
+        self.b_output = np.multiply(b_input, tmp)
 
 class Sigmoid:
     def forward(self, inputs):
@@ -32,7 +31,6 @@ class Sigmoid:
 
     def backward(self, b_input):
         pass
-        # // To do: Implement the sigmoid derivative with respect to the input
 
 
 class Softmax:
@@ -46,8 +44,7 @@ class Softmax:
         self.output = np.divide(target_exp, total[:, None])
 
     def backward(self, b_input):
-        # // To do: Implement the softmax derivative with respect to the input
-        self.b_output = b_input * (self.output - self.output ** 2)
+        self.b_output = b_input
 
 
 if __name__ == '__main__':
