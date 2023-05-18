@@ -19,7 +19,7 @@ def main():
     transform = transforms.Compose([
         transforms.ToTensor(),
         transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5))
-        ])
+    ])
     train_data = datasets.CIFAR10('data', train=True,
                                   download=True, transform=transform)
     test_data = datasets.CIFAR10('data', train=False,
@@ -46,7 +46,7 @@ def main():
 
     neural_network = NeuralNetwork(train_features.shape[0], 20, 10, train_features, y_train)
     neural_network.train()
-    #neural_network.confusion_matrix()
+    # neural_network.confusion_matrix()
 
 
 def one_hot_encode(data_class, cat_count):
@@ -57,7 +57,8 @@ def one_hot_encode(data_class, cat_count):
         one_hot[data_class[i]] = 1
         one_hot_list[i] = one_hot
 
-    return one_hot_list # TODO
+    return one_hot_list  # TODO
+
 
 if __name__ == '__main__':
     train_features = np.array([[1, 2, 3, 1],

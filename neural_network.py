@@ -9,15 +9,15 @@ class NeuralNetwork:
     def __init__(self, first_layer_neurons, hidden_layer_size, last_layer_neurons, x_train, y_train):
         w1 = [[1, 1, 1, 1],
               [-1, -1, -1, -1],
-              [2,2,2,2]]
-        b1 = [0,3, 2]
+              [2, 2, 2, 2]]
+        b1 = [0, 3, 2]
 
         self.Layer1 = Dense(first_layer_neurons, hidden_layer_size, w1, b1)
 
         self.Act1 = ReLU()
 
-        w2 = [[0,1,3],
-              [1,0,1]]
+        w2 = [[0, 1, 3],
+              [1, 0, 1]]
         b2 = [-1, 2]
         self.Layer2 = Dense(hidden_layer_size, last_layer_neurons, w2, b2)
 
@@ -67,5 +67,3 @@ class NeuralNetwork:
         # plt.ylabel("Actual")
         # plt.title("Confusion Matrix for the training set")
         # plt.show()
-
-
