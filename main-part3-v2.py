@@ -4,7 +4,7 @@ import numpy as np
 import torch
 import torchvision.transforms as transforms
 from matplotlib import pyplot as plt
-from sklearn.manifold import TSNE
+from sklearn.decomposition import PCA
 from torchvision import datasets
 from torchvision.models import resnet34
 
@@ -13,10 +13,8 @@ np.random.seed(0)
 NEPOCHS = 20
 LR = 0.5
 DECAY_LR = -0.01
-THETA = 1 / 4
+THETA = 1 / 3
 DATA_SIZE = None
-# r1 = 1
-# r2 = 2
 FEATURE_SIZE = None
 NEURONS = 10
 DATA = None
@@ -44,6 +42,9 @@ class Neuron:
 # plt.legend()
 # plt.show()
 
+def variance(num_of_classes):
+    return np.var(num_of_classes)
+
 
 def extract_feature(cifar10):
     resnet = resnet34(pretrained=True)
@@ -65,7 +66,7 @@ def data_cluster(cluster, labels):
     cluster8 = []
     cluster9 = []
     cluster10 = []
-    cluster_indxs = []
+
     for idx, c in enumerate(cluster):
         if c == 0:
             cluster1.append(labels[idx])
@@ -88,49 +89,102 @@ def data_cluster(cluster, labels):
         elif c == 9:
             cluster10.append(labels[idx])
     print('----------------Number of data from each class in each cluster:----------------')
+    num_of_class = []
     print('cluster1:')
     for i in range(10):
-        print(f"class {i}: {cluster1.count(i)}")
+        c1 = cluster1.count(i)
+        print(f"class {i}: {c1}")
+        num_of_class.append(c1)
+    print(f"variance: {variance(num_of_class)}")
+    num_of_class.clear()
     print()
     print('cluster2:')
     for i in range(10):
-        print(f"class {i}: {cluster2.count(i)}")
+        c2 = cluster2.count(i)
+        print(f"class {i}: {c2}")
+        num_of_class.append(c2)
+    print(f"variance: {variance(num_of_class)}")
+    num_of_class.clear()
     print()
     print('cluster3:')
     for i in range(10):
-        print(f"class {i}: {cluster3.count(i)}")
+        c3 = cluster3.count(i)
+        print(f"class {i}: {c3}")
+        num_of_class.append(c3)
+    print(f"variance: {variance(num_of_class)}")
+    num_of_class.clear()
     print()
     print('cluster4:')
     for i in range(10):
-        print(f"class {i}: {cluster4.count(i)}")
+        c4 = cluster4.count(i)
+        print(f"class {i}: {c4}")
+        num_of_class.append(c4)
+    print(f"variance: {variance(num_of_class)}")
+    num_of_class.clear()
     print()
     print('cluster5:')
     for i in range(10):
-        print(f"class {i}: {cluster5.count(i)}")
+        c5 = cluster5.count(i)
+        print(f"class {i}: {c5}")
+        num_of_class.append(c5)
+    print(f"variance: {variance(num_of_class)}")
+    num_of_class.clear()
     print()
     print('cluster6:')
     for i in range(10):
-        print(f"class {i}: {cluster6.count(i)}")
+        c6 = cluster6.count(i)
+        print(f"class {i}: {c6}")
+        num_of_class.append(c6)
+    print(f"variance: {variance(num_of_class)}")
+    num_of_class.clear()
     print()
     print('cluster7:')
     for i in range(10):
-        print(f"class {i}: {cluster7.count(i)}")
+        c7 = cluster7.count(i)
+        print(f"class {i}: {c7}")
+        num_of_class.append(c7)
+    print(f"variance: {variance(num_of_class)}")
+    num_of_class.clear()
     print()
     print('cluster8:')
     for i in range(10):
-        print(f"class {i}: {cluster8.count(i)}")
+        c8 = cluster8.count(i)
+        print(f"class {i}: {c8}")
+        num_of_class.append(c8)
+    print(f"variance: {variance(num_of_class)}")
+    num_of_class.clear()
     print()
     print('cluster9:')
     for i in range(10):
-        print(f"class {i}: {cluster9.count(i)}")
+        c9 = cluster9.count(i)
+        print(f"class {i}: {c9}")
+        num_of_class.append(c9)
+    print(f"variance: {variance(num_of_class)}")
+    num_of_class.clear()
     print()
     print('cluster10:')
     for i in range(10):
-        print(f"class {i}: {cluster10.count(i)}")
+        c10 = cluster10.count(i)
+        print(f"class {i}: {c10}")
+        num_of_class.append(c10)
+    print(f"variance: {variance(num_of_class)}")
+    num_of_class.clear()
 
 
 def t1andt2_neuron_layer(min_bound, max_bound):
-    W = np.random.uniform(min_bound, max_bound, (NEURONS, FEATURE_SIZE))
+    random_indices = np.random.choice(len(DATA), size=NEURONS, replace=False)
+    W = DATA[random_indices, :]
+    pca = PCA(2)
+    reduced_data = pca.fit_transform(DATA)
+    # W = np.random.uniform(min_bound, max_bound, (NEURONS, FEATURE_SIZE))
+    reduced_weight = pca.fit_transform(W)
+    plt.scatter(reduced_data[:, 0], reduced_data[:, 1], s=12, label='Data')
+    plt.plot(reduced_weight[:, 0], reduced_weight[:, 1], lw=1, c='r', marker='o', ms=4, label='Neurons')
+    plt.title('Created Dataset + Neurons Initial Position')
+    plt.xlabel('X1')
+    plt.ylabel('X2')
+    plt.legend()
+    plt.show()
     return W
 
 
@@ -275,7 +329,7 @@ def type3(W):
                 continue
             W_random_1.append(W_2d[i][j].fv)
 
-    W_random_1 = np.array(W_random_1).reshape(10, 2)
+    W_random_1 = np.array(W_random_1).reshape(NEURONS, FEATURE_SIZE)
 
     return W_random_1
 
@@ -286,18 +340,6 @@ def clustering(neuron):
         D = np.linalg.norm(neuron - row, axis=1)
         idx = np.argmin(D)
         cluster[i] = idx
-
-        # mn_dist = float('inf')
-        # # dist of the point from all centroids
-        # for idx, centroid in enumerate(neuron):
-        #     s = 0
-        #     for v in range(features):
-        #         s += (float(centroid[v]) - float(row[v])) ** 2
-        #     distance = np.sqrt(s)
-        #
-        #     # store closest centroid
-        #     if mn_dist > distance:
-        #         mn_dist = distance
 
     return cluster
 
@@ -327,6 +369,7 @@ def main():
     DATA = features.reshape(features.shape[0], features.shape[1])
     DATA_SIZE = features.shape[0]
     FEATURE_SIZE = features.shape[1]
+    print(DATA)
     min_bound = np.min(DATA)
     max_bound = np.max(DATA)
 
@@ -335,23 +378,50 @@ def main():
     W2 = copy.deepcopy(t1_W)
     W3 = copy.deepcopy(t1_W)
 
-    print('type1:')
+    print('SOM started...')
     W1_aft = type1(W1)
-    print('weigth:')
-    print(W1)
-    flattened_Weight = W1_aft.reshape(-1, W1_aft.shape[-1])
-    print('flatt:')
-    print(flattened_Weight)
-    tsne = TSNE(n_components=2, perplexity=5)
-    tsne_w = tsne.fit_transform(flattened_Weight)
-    plt.scatter(tsne_w[:, 0], tsne_w[:, 1])
+    pca = PCA(2)
+    reduced_data = pca.fit_transform(DATA)
+    reduced_weight = pca.fit_transform(W1_aft)
+    plt.scatter(reduced_data[:, 0], reduced_data[:, 1], s=12, label='Data')
+    plt.plot(reduced_weight[:, 0], reduced_weight[:, 1], lw=1, c='r', marker='o', ms=4, label='Neurons')
+    plt.title('Created Dataset + Neurons Position')
+    plt.xlabel('X1')
+    plt.ylabel('X2')
+    plt.legend()
     plt.show()
-
-    # W2_aft = type2(W2)
-    # W3_aft = type3(W3)
 
     cluster = clustering(W1_aft)
     data_cluster(cluster, y_train)
+    #
+    # pca = PCA(2)
+    # reduced_data = pca.fit_transform(DATA)
+    # plt.scatter(reduced_data[:, 0], reduced_data[:, 1])
+    # plt.show()
+    # reduced_weight = pca.fit_transform(W1_aft)
+    # plt.scatter(reduced_data[:, 0],
+    #             reduced_data[:, 1],
+    #             c=cluster)
+    # plt.scatter(reduced_weight[:, 0],
+    #             reduced_weight[:, 1],
+    #             s=100,
+    #             color='r')
+    # plt.show()
+    # print('weigth:')
+    # print(W1)
+    # flattened_Weight = W1_aft.reshape(-1, W1_aft.shape[-1])
+    # print('flatt:')
+    # print(flattened_Weight)
+    # tsne_w = TSNE(n_components=2, perplexity=5)
+    # tsne_d = TSNE(n_components=2, perplexity=30)
+    # tsne_weights = tsne_w.fit_transform(W1_aft)
+    # tsne_datas = tsne_d.fit_transform(DATA)
+    # plt.scatter(tsne_datas[:, 0], tsne_datas[:, 1], s=1, c='blue')
+    # plt.scatter(tsne_weights[:, 0], tsne_weights[:, 1], s=10, c='red')
+    # plt.show()
+
+    # W2_aft = type2(W2)
+    # W3_aft = type3(W3)
 
 
 if __name__ == '__main__':
