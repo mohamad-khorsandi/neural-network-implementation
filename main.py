@@ -67,3 +67,4 @@ if __name__ == '__main__':
 
     neural_network = NeuralNetwork(4, 3, 2, train_features, y_train)
     neural_network.train()
+

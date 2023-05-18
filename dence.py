@@ -22,8 +22,7 @@ class Dense:
 
     def backward(self, b_input):
         self.b_output = np.dot(b_input, self.weights)
-        self.grad_w = np.transpose((np.matmul(np.transpose(self.forward_input), b_input)) / b_input.shape[0])
+        self.grad_w = -1 * (np.transpose((np.matmul(np.transpose(self.forward_input), b_input)) / b_input.shape[0]))
         bias_derivative = np.full(self.bias.shape, 1)
-        # self.grad_b = (np.matmul(np.transpose(bias_derivative), b_input)) / b_input.shape[0]
-        self.grad_b = np.transpose((bias_derivative * (np.sum(b_input, axis=0))) / b_input.shape[0])
-        print(3)
+        self.grad_b = -1 * (np.transpose((bias_derivative * (np.sum(b_input, axis=0))) / b_input.shape[0]))
+
