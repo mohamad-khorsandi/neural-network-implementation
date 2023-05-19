@@ -25,9 +25,6 @@ def main():
     test_data = datasets.CIFAR10('data', train=False,
                                  download=True, transform=transform)
 
-    # train_loader = torch.utils.data.DataLoader(train_data, batch_size=1, shuffle=True)
-    # test_loader = torch.utils.data.DataLoader(test_data, batch_size=1, shuffle=False)
-
     x_train = []
     y_train = []
     counter = 0
@@ -39,12 +36,12 @@ def main():
             break
 
     x_train = torch.stack(x_train)
-    y_train = np.array(y_train)
+    y_train = one_hot_encode(y_train, 10)
 
     features = extract_feature(x_train)
     train_features = features.reshape(features.shape[0], features.shape[1])
 
-    neural_network = NeuralNetwork(train_features.shape[0], 20, 10, train_features, y_train)
+    neural_network = NeuralNetwork(train_features.shape[1], 20, 10, train_features, y_train)
     neural_network.train()
     # neural_network.confusion_matrix()
 
@@ -61,10 +58,11 @@ def one_hot_encode(data_class, cat_count):
 
 
 if __name__ == '__main__':
-    train_features = np.array([[1, 2, 3, 1],
-                               [4, 5, 6, 8]])
-    y_train = one_hot_encode([0, 1], 2)
-
-    neural_network = NeuralNetwork(4, 3, 2, train_features, y_train)
-    neural_network.train()
+    main()
+    # train_features = np.array([[1, 2, 3, 1],
+    #                            [4, 5, 6, 8]])
+    # y_train = one_hot_encode([0, 1], 2)
+    #
+    # neural_network = NeuralNetwork(4, 3, 2, train_features, y_train)
+    # neural_network.train()
 

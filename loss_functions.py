@@ -16,8 +16,8 @@ class CategoricalCrossEntropyLoss:
                 assert not math.isnan(item)
                 assert not math.isinf(item)
 
-        epsilon = 1e-10
-        softmax_output = np.clip(softmax_output, epsilon, 1. - epsilon)
+        # epsilon = 1e-10
+        # softmax_output = np.clip(softmax_output, epsilon, 1. - epsilon)
 
         for i in range(len(softmax_output)):
             single_loss = -1 * np.sum(y_one_hot[i] * np.log(softmax_output[i]))

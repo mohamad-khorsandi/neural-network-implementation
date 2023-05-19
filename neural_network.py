@@ -1,3 +1,5 @@
+import math
+
 import numpy as np
 from dence import Dense
 from activation_functions import ReLU, Sigmoid, Softmax
@@ -12,14 +14,14 @@ class NeuralNetwork:
               [2, 2, 2, 2]]
         b1 = [0, 3, 2]
 
-        self.Layer1 = Dense(first_layer_neurons, hidden_layer_size, w1, b1)
+        self.Layer1 = Dense(first_layer_neurons, hidden_layer_size, None, None)
 
         self.Act1 = ReLU()
 
         w2 = [[0, 1, 3],
               [1, 0, 1]]
         b2 = [-1, 2]
-        self.Layer2 = Dense(hidden_layer_size, last_layer_neurons, w2, b2)
+        self.Layer2 = Dense(hidden_layer_size, last_layer_neurons, None, None)
 
         self.Act2 = Softmax()
         self.Loss = CategoricalCrossEntropyLoss()

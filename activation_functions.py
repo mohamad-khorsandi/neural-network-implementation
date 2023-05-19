@@ -1,3 +1,5 @@
+import math
+
 import numpy as np
 
 
@@ -9,7 +11,7 @@ class ReLU:
     def forward(self, inputs):
         z_array = np.array(inputs)
         row, col = z_array.shape
-        for i in range(row): # todo use matrix
+        for i in range(row):
             for j in range(col):
                 z_array[i, j] = max(0, z_array[i, j])
         self.output = z_array
@@ -46,6 +48,11 @@ class Softmax:
     def backward(self, b_input):
         self.b_output = b_input
 
+def assert_data(data):
+    for i in range(len(data)):
+        for j in range(len(data[i])):
+            assert not math.isnan(data[i][j])
+            assert not math.isinf(data[i][j])
 
 if __name__ == '__main__':
     sm = Softmax()
