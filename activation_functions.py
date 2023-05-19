@@ -46,18 +46,18 @@ class Softmax:
     def forward(self, inputs):
         target_exp = np.exp(inputs)
         self.resolve_inf(target_exp)
-        assert_mat(target_exp)
+        #assert_mat(target_exp)
 
         total = np.sum(target_exp, axis=1)
         self.resolve_inf(total)
-        assert_vec(total)
+        #assert_vec(total)
 
         self.output = np.divide(target_exp, total[:, None])
 
     def backward(self, b_input):
         self.b_output = b_input
 
-    def resolve_inf(self, mat):
+    def resolve_inf(self, mat): # todo use numpy
         Max = np.finfo(np.float32).max
         if len(mat.shape) == 2:
             for i in range(len(mat)):

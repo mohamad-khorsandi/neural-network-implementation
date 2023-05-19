@@ -3,39 +3,41 @@ import numpy as np
 import torch
 from torchvision import datasets
 import torchvision.transforms as transforms
+from torchvision.models import resnet34, ResNet34_Weights
+
+dir = 'extracted_features/RES_NET34.npz'
 
 
 def get_train_features():
-    dir = "extracted_feachers/resnet34.npz"
-    if os.path.exists(.file):
-        data = np.load(.file)
+    if os.path.exists(dir):
+        data = np.load(dir)
         x_train = data['x_train']
         y_train = data['y_train']
         return x_train, y_train
     else:
-        x_train, y_train, x_test, y_test = ._extract_and_save()
+        x_train, y_train, x_test, y_test = extract_and_save()
         return x_train, y_train
 
 
 def get_test_features():
-    if os.path.exists(.file):
-        data = np.load(.file)
+    if os.path.exists(dir):
+        data = np.load(dir)
         x_test = data['x_test']
         y_test = data['y_test']
         return x_test, y_test
 
     else:
-        x_train, y_train, x_test, y_test = ._extract_and_save()
+        x_train, y_train, x_test, y_test = extract_and_save()
         return x_test, y_test
 
 
-def _extract_and_save():
+def extract_and_save():
     train_images, y_train, test_images, y_test = load_cifar10()
     y_train = np.array(y_train)
     y_test = np.array(y_test)
-    x_train = extract_feature(, train_images)
-    x_test = extract_feature(, test_images)
-    np.savez(.file, x_train=x_train, y_train=y_train, x_test=x_test, y_test=y_test)
+    x_train = extract_feature(train_images)
+    x_test = extract_feature(test_images)
+    np.savez(dir, x_train=x_train, y_train=y_train, x_test=x_test, y_test=y_test)
     return x_train, y_train, x_test, y_test
 
 
@@ -58,16 +60,20 @@ def load_cifar10():
 def get_images_and_labels(data_set):
     images = []
     labels = []
+    c = 0
     for image, label in data_set:
         images.append(image)
         labels.append(label)
+        c += 1
+        if c > 10000:
+            break
 
     return images, labels
 
 
-def extract_feature(, images):
+def extract_feature(images):
     images = torch.stack(images)
-    model = .model(weights=.weights)
+    model = resnet34(weights=ResNet34_Weights.DEFAULT)
 
     for param in model.parameters():
         param.requires_grad = False

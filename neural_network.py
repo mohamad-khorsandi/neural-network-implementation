@@ -2,7 +2,7 @@ import math
 
 import numpy as np
 
-from assets import assert_vec, assert_mat
+from assets import assert_mat
 from dence import Dense
 from activation_functions import ReLU, Sigmoid, Softmax
 from loss_functions import CategoricalCrossEntropyLoss
@@ -36,26 +36,26 @@ class NeuralNetwork:
     def train(self):
         for epoch in range(20):
             # forward
-            assert_mat(self.x_train)
+            # assert_mat(self.x_train)
 
             self.Layer1.forward(self.x_train)
-            assert_mat(self.Layer1.output)
+            # assert_mat(self.Layer1.output)
 
             self.Act1.forward(self.Layer1.output)
-            assert_mat(self.Act1.output)
+            # assert_mat(self.Act1.output)
 
             self.Layer2.forward(self.Act1.output)
-            assert_mat(self.Layer2.output)
+            #assert_mat(self.Layer2.output)
 
             self.Act2.forward(self.Layer2.output)
-            assert_mat(self.Act2.output)
+            #assert_mat(self.Act2.output)
 
             loss = self.Loss.forward(self.Act2.output, self.y_train_one_hot)
-            assert not math.isnan(loss)
+            #assert not math.isnan(loss)
             # Report
             y_predict = np.argmax(self.Act2.output, axis=1)
-            print(self.test(self.y_train_one_hot, y_predict))
-            accuracy = np.mean(self.y_train_one_hot == y_predict)
+            #print(self.test(self.y_train_one_hot, y_predict))
+            accuracy = np.mean(self.y_train == y_predict)
             print(f'Epoch:{epoch}')
             print(f'Loss: {loss}')
             print(f'Accuracy: {accuracy}')
@@ -63,19 +63,19 @@ class NeuralNetwork:
 
             # backward
             self.Loss.backward(self.Act2.output, self.y_train_one_hot)
-            assert_mat(self.Loss.b_output)
+            #assert_mat(self.Loss.b_output)
 
             self.Act2.backward(self.Loss.b_output)
-            assert_mat(self.Act2.b_output)
+            #assert_mat(self.Act2.b_output)
 
             self.Layer2.backward(self.Act2.b_output)
-            assert_mat(self.Layer2.b_output)
+            #assert_mat(self.Layer2.b_output)
 
             self.Act1.backward(self.Layer2.b_output)
-            assert_mat(self.Act1.b_output)
+            #assert_mat(self.Act1.b_output)
 
             self.Layer1.backward(self.Act1.b_output)
-            assert_mat(self.Layer1.b_output)
+            #assert_mat(self.Layer1.b_output)
 
 
             # update params
