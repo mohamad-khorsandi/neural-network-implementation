@@ -2,7 +2,7 @@ import math
 
 import numpy as np
 
-from assets import assert_vac, assert_mat
+from assets import assert_vec, assert_mat
 from dence import Dense
 from activation_functions import ReLU, Sigmoid, Softmax
 from loss_functions import CategoricalCrossEntropyLoss
@@ -10,9 +10,9 @@ from optimizers import SGD
 
 
 class NeuralNetwork:
-    def __init__(self, first_layer_neurons, hidden_layer_size, last_layer_neurons, x_train, y_train):
+    def __init__(self, first_layer_neurons, hidden_layer_size, last_layer_neurons, x_train, y_train_one_hot, y_train):
         w1 = [[1, 1, 1, 1],
-              [-1, -1, -1, -1],
+              [-1, -1, -1, -1],#todo
               [2, 2, 2, 2]]
         b1 = [0, 3, 2]
 
@@ -27,10 +27,11 @@ class NeuralNetwork:
 
         self.Act2 = Softmax()
         self.Loss = CategoricalCrossEntropyLoss()
-        self.Optimizer = SGD(learning_rate=0.001)
+        self.Optimizer = SGD(learning_rate=0.1)
         self.x_train = x_train
-        self.y_train = y_train
+        self.y_train_one_hot = y_train_one_hot
         self.last_layer_neurons = last_layer_neurons
+        self.y_train = y_train
 
     def train(self):
         for epoch in range(20):
@@ -49,18 +50,19 @@ class NeuralNetwork:
             self.Act2.forward(self.Layer2.output)
             assert_mat(self.Act2.output)
 
-            loss = self.Loss.forward(self.Act2.output, self.y_train)
+            loss = self.Loss.forward(self.Act2.output, self.y_train_one_hot)
             assert not math.isnan(loss)
             # Report
             y_predict = np.argmax(self.Act2.output, axis=1)
-            accuracy = np.mean(self.y_train == y_predict)
+            print(self.test(self.y_train_one_hot, y_predict))
+            accuracy = np.mean(self.y_train_one_hot == y_predict)
             print(f'Epoch:{epoch}')
             print(f'Loss: {loss}')
             print(f'Accuracy: {accuracy}')
             print('--------------------------')
 
             # backward
-            self.Loss.backward(self.Act2.output, self.y_train)
+            self.Loss.backward(self.Act2.output, self.y_train_one_hot)
             assert_mat(self.Loss.b_output)
 
             self.Act2.backward(self.Loss.b_output)
@@ -90,3 +92,11 @@ class NeuralNetwork:
         # plt.ylabel("Actual")
         # plt.title("Confusion Matrix for the training set")
         # plt.show()
+
+    def test(self, y_true, y_pred):
+        counter = 0
+        for i in range(len(y_true)):
+            if y_true[i][y_pred[i]] == 1:
+                counter +=1
+        return counter
+

@@ -8,7 +8,7 @@ def assert_mat(data):
             assert not math.isinf(data[i][j])
 
 
-def assert_vac(data):
+def assert_vec(data):
     for i in range(len(data)):
         assert not math.isnan(data[i])
         assert not math.isinf(data[i])

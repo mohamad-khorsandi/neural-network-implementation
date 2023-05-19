@@ -1,10 +1,6 @@
 import numpy as np
 import torch
 
-import activation_functions
-from assets import assert_mat, assert_vac
-
-
 class Dense:
     def __init__(self, input_count, neuron_count, weights, bias):  # todo remove w and b
         self.output = None
@@ -18,7 +14,7 @@ class Dense:
         self.grad_b = np.ndarray
         self.forward_input = np.ndarray
         self.weights = torch.randn((input_count, neuron_count)).numpy()
-        self.bias = torch.randn((1, neuron_count)).numpy() # todo chekc bias
+        self.bias = torch.randn((1, neuron_count)).numpy()
 
     def forward(self, inputs):
         self.forward_input = inputs

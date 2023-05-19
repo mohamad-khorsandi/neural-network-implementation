@@ -2,7 +2,7 @@ import math
 
 import numpy as np
 
-from assets import assert_vac, assert_mat
+from assets import assert_vec, assert_mat
 
 
 class ReLU:
@@ -21,6 +21,7 @@ class ReLU:
     def backward(self, b_input):
         tmp = (self.output > 0)
         self.b_output = np.multiply(b_input, tmp)
+
 
 class Sigmoid:
     def forward(self, inputs):
@@ -44,15 +45,31 @@ class Softmax:
 
     def forward(self, inputs):
         target_exp = np.exp(inputs)
+        self.resolve_inf(target_exp)
+        assert_mat(target_exp)
+
         total = np.sum(target_exp, axis=1)
-        assert_mat(total)
+        self.resolve_inf(total)
+        assert_vec(total)
+
         self.output = np.divide(target_exp, total[:, None])
 
     def backward(self, b_input):
         self.b_output = b_input
 
-    def limited_exp(self, mat):
-        np.ones() # todo
+    def resolve_inf(self, mat):
+        Max = np.finfo(np.float32).max
+        if len(mat.shape) == 2:
+            for i in range(len(mat)):
+                for j in range(len(mat[i])):
+                    if math.isinf(mat[i][j]):
+                        mat[i][j] = Max
+
+        elif len(mat.shape) == 1:
+            for i in range(len(mat)):
+                if math.isinf(mat[i]):
+                    mat[i] = Max
+
 
 
 if __name__ == '__main__':

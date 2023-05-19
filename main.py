@@ -1,15 +1,16 @@
 import math
+import random
 
 import numpy as np
 import torch
 import torchvision.transforms as transforms
 from torchvision import datasets
-from torchvision.models import resnet34
+from torchvision.models import resnet34, ResNet34_Weights
 from neural_network import NeuralNetwork
 
 
 def extract_feature(cifar10):
-    resnet = resnet34(pretrained=True)
+    resnet = resnet34(weights=ResNet34_Weights.DEFAULT)
     for param in resnet.parameters():
         param.requires_grad = False
     modules = list(resnet.children())[:-1]
@@ -34,11 +35,12 @@ def main():
         counter += 1
         x_train.append(img)
         y_train.append(label)
-        if counter == 10:
+        if counter == 100:
             break
 
     x_train = torch.stack(x_train)
-    y_train = one_hot_encode(y_train, 10)
+    y_train = np.array(y_train)
+    y_train_one_hot = one_hot_encode(y_train, 10)
 
     features = extract_feature(x_train)
     train_features = features.reshape(features.shape[0], features.shape[1])

@@ -20,6 +20,5 @@ class CategoricalCrossEntropyLoss:
         assert not math.isnan(-1 * (sum_loss / softmax_output.shape[0]))
         return -1 * (sum_loss / softmax_output.shape[0])
 
-
     def backward(self, softmax_output, class_label):
         self.b_output = class_label - softmax_output
