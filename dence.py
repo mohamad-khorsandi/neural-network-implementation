@@ -2,6 +2,7 @@ import numpy as np
 import torch
 
 import activation_functions
+from assets import assert_mat, assert_vac
 
 
 class Dense:
@@ -17,17 +18,14 @@ class Dense:
         self.grad_b = np.ndarray
         self.forward_input = np.ndarray
         self.weights = torch.randn((input_count, neuron_count)).numpy()
-        self.bias = torch.randn((1, neuron_count)).numpy()
+        self.bias = torch.randn((1, neuron_count)).numpy() # todo chekc bias
 
     def forward(self, inputs):
-        activation_functions.assert_data(inputs)
         self.forward_input = inputs
-        activation_functions.assert_data(inputs)
         self.output = np.matmul(inputs, self.weights) + self.bias
-        activation_functions.assert_data(inputs)
-
 
     def backward(self, b_input):
+        assert b_input.shape[0] != 0
         self.b_output = np.dot(b_input, self.weights.T)
         self.grad_w = -1 * ((np.matmul(np.transpose(self.forward_input), b_input)) / b_input.shape[0])
         bias_derivative = np.full(self.bias.shape, 1)

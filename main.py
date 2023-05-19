@@ -1,3 +1,5 @@
+import math
+
 import numpy as np
 import torch
 import torchvision.transforms as transforms
@@ -40,11 +42,20 @@ def main():
 
     features = extract_feature(x_train)
     train_features = features.reshape(features.shape[0], features.shape[1])
-
+    train_features = normalize_data(train_features)
     neural_network = NeuralNetwork(train_features.shape[1], 20, 10, train_features, y_train)
     neural_network.train()
     # neural_network.confusion_matrix()
 
+
+def normalize_data(data):
+    data_min = np.min(data, axis=0)
+    data_max = np.max(data, axis=0)
+
+    # Normalize the data
+    data_norm = (data - data_min) / (data_max - data_min)
+
+    return data_norm
 
 def one_hot_encode(data_class, cat_count):
     one_hot_list = np.zeros((len(data_class), cat_count))

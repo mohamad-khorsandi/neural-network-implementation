@@ -2,6 +2,8 @@ import math
 
 import numpy as np
 
+from assets import assert_vac, assert_mat
+
 
 class ReLU:
     def __init__(self):
@@ -41,27 +43,17 @@ class Softmax:
         self.output = None
 
     def forward(self, inputs):
-        # # // To do: Implement the softmax formula
-        # maxx = np.max(inputs)  # maxx = np.max(inputs, axis=1, keepdims=True)
-        # mines = inputs - maxx
-        # exp_inputs = np.exp(mines)
-        # summ = np.sum(exp_inputs)  # summ = np.sum(exp_inputs, axis=1, keepdims=True)
-        # self.output = exp_inputs / summ
-
-        max_inputs = np.max(inputs)
-        std_inputs = inputs - max_inputs
-        target_exp = np.exp(std_inputs)
+        target_exp = np.exp(inputs)
         total = np.sum(target_exp, axis=1)
+        assert_mat(total)
         self.output = np.divide(target_exp, total[:, None])
 
     def backward(self, b_input):
         self.b_output = b_input
 
-def assert_data(data):
-    for i in range(len(data)):
-        for j in range(len(data[i])):
-            assert not math.isnan(data[i][j])
-            assert not math.isinf(data[i][j])
+    def limited_exp(self, mat):
+        np.ones() # todo
+
 
 if __name__ == '__main__':
     sm = Softmax()
