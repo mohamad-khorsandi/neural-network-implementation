@@ -11,30 +11,22 @@ from optimizers import SGD
 
 class NeuralNetwork:
     def __init__(self, first_layer_neurons, hidden_layer_size, last_layer_neurons, x_train, y_train_one_hot, y_train):
-        w1 = [[1, 1, 1, 1],
-              [-1, -1, -1, -1],#todo
-              [2, 2, 2, 2]]
-        b1 = [0, 3, 2]
-
-        self.Layer1 = Dense(first_layer_neurons, hidden_layer_size, None, None)
-
+        self.Layer1 = Dense(first_layer_neurons, hidden_layer_size)
         self.Act1 = ReLU()
-
-        w2 = [[0, 1, 3],
-              [1, 0, 1]]
-        b2 = [-1, 2]
-        self.Layer2 = Dense(hidden_layer_size, last_layer_neurons, None, None)
+        self.Layer2 = Dense(hidden_layer_size, last_layer_neurons)
 
         self.Act2 = Softmax()
         self.Loss = CategoricalCrossEntropyLoss()
-        self.Optimizer = SGD(learning_rate=1)
+        self.Optimizer = SGD(learning_rate=5)
         self.x_train = x_train
         self.y_train_one_hot = y_train_one_hot
         self.last_layer_neurons = last_layer_neurons
         self.y_train = y_train
 
     def train(self):
+        #todo bach size
         for epoch in range(20):
+
             # forward
             # assert_mat(self.x_train)
 
@@ -79,6 +71,7 @@ class NeuralNetwork:
 
 
             # update params
+            self.Optimizer.lr_update(epoch)
             self.Optimizer.update(self.Layer1)
             self.Optimizer.update(self.Layer2)
 

@@ -11,3 +11,9 @@ class SGD:
                 layer.weights[i, j] = layer.weights[i, j] - (self.learning_rate * layer.grad_w[i, j])
         for j in range(layer.bias.shape[0]):
             layer.bias[j] = layer.bias[j] - (self.learning_rate * layer.grad_b[j])
+
+    def lr_update(self, i):
+        if i % 2 == 0 and i != 0:
+            self.learning_rate = self.learning_rate * .95
+            print(self.learning_rate)
+

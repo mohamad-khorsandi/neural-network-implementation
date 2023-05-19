@@ -2,14 +2,12 @@ import numpy as np
 import torch
 
 class Dense:
-    def __init__(self, input_count, neuron_count, weights, bias):  # todo remove w and b
+    def __init__(self, input_count, neuron_count):
         self.output = None
         self.b_output = None
 
         self.input_count = input_count
         self.neuron_count = neuron_count
-        # self.weights = np.array(weights)
-        # self.bias = np.array(bias)
         self.grad_w = np.ndarray
         self.grad_b = np.ndarray
         self.forward_input = np.ndarray

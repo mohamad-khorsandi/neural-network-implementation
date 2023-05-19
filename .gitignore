@@ -12,3 +12,4 @@
 /data/cifar-10-batches-py/data_batch_1
 /data/cifar-10-python.tar.gz
 /data/cifar-10-batches-py/batches.meta
+/extracted_features/RES_NET34.npz
