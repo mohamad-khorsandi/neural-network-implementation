@@ -45,10 +45,11 @@ class NeuralNetwork:
 
             # Report
             y_predict = np.argmax(self.Act2.output, axis=1)
+
             print(self.test(self.y_train_one_hot, y_predict))
             accuracy = np.mean(self.y_train == y_predict)
             self.confusion_matrix(self.y_train, y_predict)
-            F1_Score = f1_score(self.y_train_one_hot, y_predict)
+            F1_Score = f1_score(self.y_train, y_predict)
             print(f'Epoch:{epoch + 1}')
             print(f'Loss: {loss}')
             print(f'Accuracy: {accuracy}')
@@ -76,8 +77,8 @@ class NeuralNetwork:
             self.Optimizer.update(self.Layer2)
 
     # todo cal this for test and train set
-    def confusion_matrix(self, y_true, y_predict):
-        cm_train = confusion_matrix(y_true, y_predict)
+    def confusion_matrix(self, y_true_one_hot, y_predict):
+        cm_train = confusion_matrix(y_true_one_hot, y_predict)
         plt.subplots(figsize=(10, 6))
         sb.heatmap(cm_train, annot=True, fmt='g')
         plt.xlabel("Predicted")
@@ -85,9 +86,6 @@ class NeuralNetwork:
         plt.title("Confusion Matrix for the training set")
         plt.show()
 
-    def f1_score(self, y_true_one_hot, y_pred):
-        f1 = f1_score(y_true_one_hot, y_pred)
-        return f1
 
     def test(self, y_true, y_pred):
         counter = 0
