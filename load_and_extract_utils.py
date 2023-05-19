@@ -5,36 +5,37 @@ from torchvision import datasets
 import torchvision.transforms as transforms
 
 
-def get_train_features(fx):
-    if os.path.exists(fx.file):
-        data = np.load(fx.file)
+def get_train_features():
+    dir = "extracted_feachers/resnet34.npz"
+    if os.path.exists(.file):
+        data = np.load(.file)
         x_train = data['x_train']
         y_train = data['y_train']
         return x_train, y_train
     else:
-        x_train, y_train, x_test, y_test = fx._extract_and_save()
+        x_train, y_train, x_test, y_test = ._extract_and_save()
         return x_train, y_train
 
 
-def get_test_features(fx):
-    if os.path.exists(fx.file):
-        data = np.load(fx.file)
+def get_test_features():
+    if os.path.exists(.file):
+        data = np.load(.file)
         x_test = data['x_test']
         y_test = data['y_test']
         return x_test, y_test
 
     else:
-        x_train, y_train, x_test, y_test = fx._extract_and_save()
+        x_train, y_train, x_test, y_test = ._extract_and_save()
         return x_test, y_test
 
 
-def _extract_and_save(fx):
+def _extract_and_save():
     train_images, y_train, test_images, y_test = load_cifar10()
     y_train = np.array(y_train)
     y_test = np.array(y_test)
-    x_train = extract_feature(fx, train_images)
-    x_test = extract_feature(fx, test_images)
-    np.savez(fx.file, x_train=x_train, y_train=y_train, x_test=x_test, y_test=y_test)
+    x_train = extract_feature(, train_images)
+    x_test = extract_feature(, test_images)
+    np.savez(.file, x_train=x_train, y_train=y_train, x_test=x_test, y_test=y_test)
     return x_train, y_train, x_test, y_test
 
 
@@ -64,9 +65,9 @@ def get_images_and_labels(data_set):
     return images, labels
 
 
-def extract_feature(fx, images):
+def extract_feature(, images):
     images = torch.stack(images)
-    model = fx.model(weights=fx.weights)
+    model = .model(weights=.weights)
 
     for param in model.parameters():
         param.requires_grad = False

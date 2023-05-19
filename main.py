@@ -45,7 +45,7 @@ def main():
     features = extract_feature(x_train)
     train_features = features.reshape(features.shape[0], features.shape[1])
     train_features = normalize_data(train_features)
-    neural_network = NeuralNetwork(train_features.shape[1], 20, 10, train_features, y_train)
+    neural_network = NeuralNetwork(train_features.shape[1], 20, 10, train_features, y_train_one_hot, y_train)
     neural_network.train()
     # neural_network.confusion_matrix()
 
