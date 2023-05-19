@@ -7,7 +7,6 @@ def main():
     y_train_one_hot = one_hot_encode(y_train, 10)
 
     x_train = normalize_data(x_train)
-    print('normalized')
     neural_network = NeuralNetwork(x_train.shape[1], 20, 10, x_train, y_train_one_hot, y_train)
     neural_network.train()
     # neural_network.confusion_matrix()

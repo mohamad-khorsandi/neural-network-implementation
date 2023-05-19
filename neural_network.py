@@ -27,7 +27,7 @@ class NeuralNetwork:
 
         self.Act2 = Softmax()
         self.Loss = CategoricalCrossEntropyLoss()
-        self.Optimizer = SGD(learning_rate=0.1)
+        self.Optimizer = SGD(learning_rate=1)
         self.x_train = x_train
         self.y_train_one_hot = y_train_one_hot
         self.last_layer_neurons = last_layer_neurons
@@ -54,7 +54,7 @@ class NeuralNetwork:
             #assert not math.isnan(loss)
             # Report
             y_predict = np.argmax(self.Act2.output, axis=1)
-            #print(self.test(self.y_train_one_hot, y_predict))
+            print(self.test(self.y_train_one_hot, y_predict))
             accuracy = np.mean(self.y_train == y_predict)
             print(f'Epoch:{epoch}')
             print(f'Loss: {loss}')
@@ -97,6 +97,6 @@ class NeuralNetwork:
         counter = 0
         for i in range(len(y_true)):
             if y_true[i][y_pred[i]] == 1:
-                counter +=1
+                counter += 1
         return counter
 

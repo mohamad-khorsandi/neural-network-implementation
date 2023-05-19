@@ -13,10 +13,10 @@ def get_train_features():
         data = np.load(dir)
         x_train = data['x_train']
         y_train = data['y_train']
-        return x_train, y_train
+        return x_train[:10], y_train[:10]
     else:
         x_train, y_train, x_test, y_test = extract_and_save()
-        return x_train, y_train
+        return x_train[:10], y_train[:10]
 
 
 def get_test_features():
@@ -60,13 +60,9 @@ def load_cifar10():
 def get_images_and_labels(data_set):
     images = []
     labels = []
-    c = 0
     for image, label in data_set:
         images.append(image)
         labels.append(label)
-        c += 1
-        if c > 10000:
-            break
 
     return images, labels
 
