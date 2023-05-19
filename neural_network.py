@@ -24,7 +24,7 @@ class NeuralNetwork:
         self.y_train = y_train
 
     def train(self):
-        # todo bach size
+
         for epoch in range(20):
             # assert_mat(self.x_train)
 
@@ -52,7 +52,7 @@ class NeuralNetwork:
             F1_Score = f1_score(self.y_train, y_predict)
             print(f'Epoch:{epoch + 1}')
             print(f'Loss: {loss}')
-            print(f'Accuracy: {accuracy}')
+            print(f'Accuracy: {accuracy * 100} %')
             print(f'f1 score: {F1_Score}')
             print('--------------------------')
 

@@ -1,6 +1,3 @@
-import math
-import random
-
 import numpy as np
 import torch
 import torchvision.transforms as transforms
@@ -47,8 +44,6 @@ def main():
     train_features = normalize_data(train_features)
     neural_network = NeuralNetwork(train_features.shape[1], 20, 10, train_features, y_train_one_hot, y_train)
     neural_network.train()
-    # neural_network.confusion_matrix()
-
 
 def normalize_data(data):
     data_min = np.min(data, axis=0)
