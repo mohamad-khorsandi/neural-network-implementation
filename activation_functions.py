@@ -41,7 +41,16 @@ class Softmax:
         self.output = None
 
     def forward(self, inputs):
-        target_exp = np.exp(inputs)
+        # # // To do: Implement the softmax formula
+        # maxx = np.max(inputs)  # maxx = np.max(inputs, axis=1, keepdims=True)
+        # mines = inputs - maxx
+        # exp_inputs = np.exp(mines)
+        # summ = np.sum(exp_inputs)  # summ = np.sum(exp_inputs, axis=1, keepdims=True)
+        # self.output = exp_inputs / summ
+
+        max_inputs = np.max(inputs)
+        std_inputs = inputs - max_inputs
+        target_exp = np.exp(std_inputs)
         total = np.sum(target_exp, axis=1)
         self.output = np.divide(target_exp, total[:, None])
 

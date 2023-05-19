@@ -20,9 +20,9 @@ class CategoricalCrossEntropyLoss:
         # softmax_output = np.clip(softmax_output, epsilon, 1. - epsilon)
 
         for i in range(len(softmax_output)):
-            single_loss = -1 * np.sum(y_one_hot[i] * np.log(softmax_output[i]))
+            single_loss = np.sum(y_one_hot[i] * np.log(softmax_output[i]))
             sum_loss += single_loss
-        return sum_loss / softmax_output.shape[0]
+        return -1 * (sum_loss / softmax_output.shape[0])
 
 
     def backward(self, softmax_output, class_label):
