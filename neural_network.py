@@ -4,7 +4,7 @@ from sklearn.metrics import confusion_matrix
 from sklearn.metrics import f1_score
 import seaborn as sb
 from dence import Dense
-from activation_functions import ReLU, Sigmoid, Softmax
+from activation_functions import ReLU, Softmax
 from loss_functions import CategoricalCrossEntropyLoss
 from optimizers import SGD
 
@@ -17,7 +17,7 @@ class NeuralNetwork:
 
         self.Act2 = Softmax()
         self.Loss = CategoricalCrossEntropyLoss()
-        self.Optimizer = SGD(learning_rate=0.001)
+        self.Optimizer = SGD(learning_rate=2)
         self.x_train = x_train
         self.y_train_one_hot = y_train_one_hot
         self.last_layer_neurons = last_layer_neurons
@@ -76,7 +76,7 @@ class NeuralNetwork:
             self.Optimizer.update(self.Layer1)
             self.Optimizer.update(self.Layer2)
 
-    # todo cal this for test and train set
+
     def confusion_matrix(self, y_true_one_hot, y_predict):
         cm_train = confusion_matrix(y_true_one_hot, y_predict)
         plt.subplots(figsize=(10, 6))
