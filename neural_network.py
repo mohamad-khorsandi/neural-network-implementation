@@ -38,7 +38,7 @@ class NeuralNetwork:
             print(self.test(self.y_train_one_hot, y_predict))
             accuracy = np.mean(self.y_train == y_predict)
             self.confusion_matrix(self.y_train, y_predict)
-            F1_Score = f1_score(self.y_train, y_predict)
+            F1_Score = f1_score(self.y_train, y_predict, average='weighted')
             print(f'Epoch:{epoch + 1}')
             print(f'Loss: {loss}')
             print(f'Accuracy: {accuracy * 100} %')
